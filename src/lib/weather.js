@@ -1,34 +1,30 @@
 import axios from "axios";
 
-const baseUrl = process.env.NEXT_PUBLIC_WEATHER_API_BASE_URL;
-const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
+// Base API URL with the API key and location included
+const apiUrl = "http://api.weatherapi.com/v1/forecast.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur";
 
-export const getWeatherData = async (lat, lon) => {
+export const getWeatherData = async () => {
   try {
     // Fetch current weather, forecast, and air quality
-    const forecastResponse = await axios.get(`${baseUrl}/forecast.json`, {
+    const forecastResponse = await axios.get(apiUrl, {
       params: {
-        key: apiKey,
-        q: `${lat},${lon}`,
-        days: 3,
-        aqi: "yes",
-        alerts: "yes",
+        days: 3, // Fetch forecast for 3 days
+        aqi: "yes", // Include air quality index
+        alerts: "yes", // Include weather alerts
       },
     });
 
-    // Fetch historical weather data for the past 7 days
+    // Calculate the date range for historical data (last 7 days)
     const today = new Date();
     const pastWeek = new Date(today);
     pastWeek.setDate(pastWeek.getDate() - 7);
 
-    const historyResponse = await axios.get(`${baseUrl}/history.json`, {
-      params: {
-        key: apiKey,
-        q: `${lat},${lon}`,
-        dt: pastWeek.toISOString().split("T")[0],
-        end_dt: today.toISOString().split("T")[0],
-      },
-    });
+    const historyUrl = `http://api.weatherapi.com/v1/history.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur&dt=${pastWeek
+      .toISOString()
+      .split("T")[0]}&end_dt=${today.toISOString().split("T")[0]}`;
+
+    // Fetch historical weather data for the past 7 days
+    const historyResponse = await axios.get(historyUrl);
 
     return {
       current: forecastResponse.data.current,
