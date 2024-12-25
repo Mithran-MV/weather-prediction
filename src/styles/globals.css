@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+:root {
+  --primary-color: #facc15; /* Yellow */
+  --secondary-color: #eab308; /* Darker Yellow */
+  --background-color: #fefce8; /* Light Yellow */
+  --text-color: #3f3f46; /* Dark Text */
+  --card-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  background-color: var(--card-color);
+  border-radius: 0.5rem; /* Replacing `@apply rounded-lg` */
+  padding: 1rem;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px var(--shadow-color);
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.card p {
+  margin: 0.25rem 0;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+/* Removed circular dependency */
+.custom-class {
+  border-radius: 0.5rem; /* Use raw border-radius property instead of @apply */
+}
