@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base API URL with the API key and location included
-const apiUrl = "http://api.weatherapi.com/v1/forecast.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur";
+const apiUrl = "https://api.weatherapi.com/v1/forecast.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur";
 
 export const getWeatherData = async () => {
   try {
@@ -19,7 +19,7 @@ export const getWeatherData = async () => {
     const pastWeek = new Date(today);
     pastWeek.setDate(pastWeek.getDate() - 7);
 
-    const historyUrl = `http://api.weatherapi.com/v1/history.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur&dt=${pastWeek
+    const historyUrl = `https://api.weatherapi.com/v1/history.json?key=d25f57f770c7415a9e880329242512&q=Sriperumbudur&dt=${pastWeek
       .toISOString()
       .split("T")[0]}&end_dt=${today.toISOString().split("T")[0]}`;
 
