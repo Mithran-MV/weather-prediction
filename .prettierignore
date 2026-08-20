@@ -2,3 +2,7 @@
 node_modules
 coverage
 package-lock.json
+
+# Markdown is hand-formatted: the README's tables and badge rows are aligned
+# for readability in a plain editor, and Prettier reflows them.
+*.md
