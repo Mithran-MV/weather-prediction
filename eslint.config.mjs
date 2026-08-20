@@ -1,14 +1,25 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import next from 'eslint-config-next';
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
+import nextTypeScript from 'eslint-config-next/typescript';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [...compat.extends("next/core-web-vitals")];
+/**
+ * Flat config. eslint-config-next v16 ships flat configs directly, so no
+ * FlatCompat shim is needed.
+ */
+const eslintConfig = [
+  { ignores: ['.next/**', 'coverage/**', 'node_modules/**', 'next-env.d.ts'] },
+  ...next,
+  ...nextCoreWebVitals,
+  ...nextTypeScript,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
+];
 
 export default eslintConfig;
