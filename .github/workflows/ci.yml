@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:coverage
+
+      - name: Production build
+        run: npm run build
+        env:
+          # The build itself never calls the API, so a sentinel value is enough
+          # — and it makes the leak check below deterministic.
+          WEATHER_API_KEY: ci-sentinel-must-not-ship-to-browser
+
+      - name: Assert the API key never reaches the client bundle
+        run: |
+          if grep -rq 'ci-sentinel-must-not-ship-to-browser' .next/static; then
+            echo "::error::WEATHER_API_KEY was inlined into the client bundle."
+            grep -rl 'ci-sentinel-must-not-ship-to-browser' .next/static
+            exit 1
+          fi
+          echo "Confirmed: WEATHER_API_KEY is absent from .next/static."
