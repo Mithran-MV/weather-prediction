@@ -1,0 +1,129 @@
+@import 'tailwindcss';
+
+/*
+ * Tailwind v4 keeps design tokens in CSS rather than a JS config.
+ * The palette is a cool slate base with a single indigo→sky accent ramp;
+ * condition-specific gradients live in `.sky-*` below so the page background
+ * can react to the actual weather without touching component code.
+ */
+@theme {
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', monospace;
+
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe6fe;
+  --color-brand-200: #bfd3fe;
+  --color-brand-300: #93b4fd;
+  --color-brand-400: #608cfa;
+  --color-brand-500: #3b66f6;
+  --color-brand-600: #2547eb;
+  --color-brand-700: #1d35d8;
+  --color-brand-800: #1e2eaf;
+  --color-brand-900: #1e2d8a;
+
+  --radius-card: 1rem;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --surface: 255 255 255;
+  --surface-muted: 248 250 252;
+  --ink: 15 23 42;
+  --ink-muted: 71 85 105;
+  --hairline: 226 232 240;
+}
+
+.dark {
+  color-scheme: dark;
+  --surface: 15 23 42;
+  --surface-muted: 2 6 23;
+  --ink: 241 245 249;
+  --ink-muted: 148 163 184;
+  --hairline: 51 65 85;
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--hairline));
+  }
+
+  body {
+    background-color: rgb(var(--surface-muted));
+    color: rgb(var(--ink));
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Respect the reader's setting rather than animating regardless. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .card {
+    background-color: rgb(var(--surface) / 0.75);
+    border: 1px solid rgb(var(--hairline) / 0.8);
+    border-radius: var(--radius-card);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px -12px rgb(15 23 42 / 0.12);
+  }
+
+  .card-label {
+    color: rgb(var(--ink-muted));
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Hero gradients keyed to the sky, not to a fixed brand colour. */
+  .sky-clear-day {
+    background-image: linear-gradient(150deg, #38bdf8 0%, #3b66f6 55%, #4c1d95 100%);
+  }
+  .sky-clear-night {
+    background-image: linear-gradient(150deg, #1e293b 0%, #1e2d8a 60%, #0f172a 100%);
+  }
+  .sky-cloud-day {
+    background-image: linear-gradient(150deg, #94a3b8 0%, #64748b 50%, #334155 100%);
+  }
+  .sky-cloud-night {
+    background-image: linear-gradient(150deg, #334155 0%, #1e293b 60%, #020617 100%);
+  }
+  .sky-rain {
+    background-image: linear-gradient(150deg, #475569 0%, #1e3a8a 55%, #0f172a 100%);
+  }
+  .sky-storm {
+    background-image: linear-gradient(150deg, #312e81 0%, #1e1b4b 55%, #020617 100%);
+  }
+  .sky-snow {
+    background-image: linear-gradient(150deg, #e0f2fe 0%, #93b4fd 55%, #475569 100%);
+  }
+}
+
+/* Leaflet paints its own light chrome; tone it down inside a dark card. */
+.dark .leaflet-tile {
+  filter: brightness(0.7) contrast(1.05) saturate(0.85);
+}
+
+.leaflet-container {
+  background-color: rgb(var(--surface-muted));
+  font-family: var(--font-sans);
+}
