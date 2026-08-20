@@ -48,7 +48,9 @@ describe('clientKey', () => {
 
   it('falls back to x-real-ip and then to a constant', () => {
     expect(
-      clientKey(new Request('https://example.com', { headers: { 'x-real-ip': '198.51.100.7' } })),
+      clientKey(
+        new Request('https://example.com', { headers: { 'x-real-ip': '198.51.100.7' } }),
+      ),
     ).toBe('198.51.100.7');
     expect(clientKey(new Request('https://example.com'))).toBe('anonymous');
   });
