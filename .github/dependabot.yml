@@ -8,9 +8,18 @@ updates:
     groups:
       # One PR per ecosystem rather than a dozen — easier to review and revert.
       react:
-        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom', 'next', 'eslint-config-next']
+        patterns:
+          [
+            'react',
+            'react-dom',
+            '@types/react',
+            '@types/react-dom',
+            'next',
+            'eslint-config-next',
+          ]
       dev-tooling:
-        patterns: ['eslint*', 'prettier*', 'vitest', '@vitest/*', 'typescript', '@types/*']
+        patterns:
+          ['eslint*', 'prettier*', 'vitest', '@vitest/*', 'typescript', '@types/*']
 
   - package-ecosystem: github-actions
     directory: /
